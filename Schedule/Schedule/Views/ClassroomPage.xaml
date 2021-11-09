@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             
+             xmlns:vm="clr-namespace:Schedule.ViewModels"
+             xmlns:cardview="clr-namespace:PanCardView;assembly=PanCardView"
+             xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+             xmlns:icon="clr-namespace:Schedule.Helpers"
+             Shell.NavBarHasShadow="true"
+             Title="{Binding Title}"
+             
+             x:Class="Schedule.Views.ClassroomPage">
+
+    <ContentPage.BindingContext>
+        <vm:ClassroomViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <ScrollView>
+                <Grid RowDefinitions="auto, *, 100">
+
+                    <!--#region Card -->
+                    <Grid Margin="50,10" Grid.Row="0">
+                        <Frame Padding="0" CornerRadius="10"
+                                           HasShadow="true" IsClippedToBounds="True">
+                            <Image Source="background" BackgroundColor="{StaticResource LightPrimary}" Aspect="Fill" HeightRequest="200"/>
+                        </Frame>
+
+                        <Grid Margin="5">
+                            <!--#region Description -->
+                            <StackLayout VerticalOptions="Start" HorizontalOptions="Start">
+                                <StackLayout Orientation="Horizontal">
+                                    <Label FontFamily="MaterialIcons" FontSize="Title"
+                                                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                                       Text="{x:Static icon:FontIcons.Phone}" TextColor="White"/>
+                                    <Label FontFamily="MuliBold"
+                                                       FontSize="Subtitle" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand"
+                                                       Text="{Binding Phone}" TextColor="White" 
+                                                       Margin="0,0,80,0"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label FontFamily="MaterialIcons" FontSize="Title"
+                                                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                                       Text="{x:Static icon:FontIcons.Map}" TextColor="White"/>
+                                    <Label FontFamily="MuliBold"
+                                                       FontSize="Subtitle" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand"
+                                                       Text="{Binding Address}" TextColor="White" 
+                                                       Margin="0,0,80,0"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label FontFamily="MaterialIcons" FontSize="Title"
+                                                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                                       Text="{x:Static icon:FontIcons.Star}" TextColor="White"/>
+                                    <Label FontFamily="MuliBold"
+                                                       FontSize="Subtitle" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand"
+                                                       Text="{Binding Description}" TextColor="White" 
+                                                       Margin="0,0,80,0"/>
+                                </StackLayout>
+                            </StackLayout>
+                            <!--#endregion-->
+
+                            <!--#region Title Name  -->
+                            <Label FontFamily="MuliBold" VerticalTextAlignment="Center"
+                                               FontSize="Title"
+                                               Text="{Binding Name}" TextColor="White"
+                                               HorizontalOptions="End" VerticalOptions="Start"/>
+                            <!--#endregion-->
+
+                            <!--#region Money -->
+                            <StackLayout Orientation="Horizontal" VerticalOptions="End" HorizontalOptions="Start">
+                                <Label FontFamily="MaterialIcons" FontSize="Title" Padding="0,3,0,0"
+                                                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                                       Text="{x:Static icon:FontIcons.Cash}" TextColor="White"/>
+                                <Label FontFamily="MuliBold"
+                                                       FontSize="Title" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand"
+                                                       Text="{Binding Money, StringFormat='{0} VND'}" TextColor="White" />
+                            </StackLayout>
+                            <!--#endregion-->
+
+                            <!--#region Help -->
+                            <StackLayout Orientation="Horizontal" VerticalOptions="End" HorizontalOptions="End">
+                                <Label FontFamily="MaterialIcons" FontSize="Title" Margin="4"
+                                                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                                       Text="{x:Static icon:FontIcons.HelpBox}" TextColor="White"/>
+                            </StackLayout>
+                            <!--#endregion-->
+
+                        </Grid>
+                    </Grid>
+                    <!--#endregion-->
+
+                    <!--#region Body Field -->
+                    <Frame Grid.Row="1" Margin="20,5" BackgroundColor="{StaticResource DarkPrimary}"
+                           HasShadow="True" CornerRadius="5" IsClippedToBounds="True" Padding="15"
+                                        HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                        <StackLayout Margin="0" Padding="0">
+                            
+                            <!--#region Title -->
+                            <Label Grid.Row="0" FontFamily="MuliBold" FontSize="Title" 
+                               VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand"
+                               Text="Information" TextColor="White"/>
+                            <!--#endregion-->
+                            
+                            <material:MaterialTextField Placeholder="Name user" 
+                                                        CardBackgroundColor="{StaticResource LightPrimary}" 
+                                                        TextColor="White" FloatingPlaceholderColor="White" 
+                                                        PlaceholderColor="White"
+                                                        Text="{Binding Name, Mode=TwoWay}" InputType="Default"
+                                                        ErrorText="Name can't null" ErrorColor="Red" HasError="{Binding IsErrorName}"
+                                                        TintColor="{StaticResource Yellow}"/>
+                            <material:MaterialTextField Placeholder="Phone"
+                                                        CardBackgroundColor="{StaticResource LightPrimary}" 
+                                                        TextColor="White" FloatingPlaceholderColor="White" 
+                                                        PlaceholderColor="White"
+                                                        Text="{Binding Phone}" InputType="Telephone"
+                                                        TintColor="{StaticResource Yellow}"/>
+                            <material:MaterialTextField Placeholder="Money"
+                                                        CardBackgroundColor="{StaticResource LightPrimary}" 
+                                                        TextColor="White" FloatingPlaceholderColor="White" 
+                                                        PlaceholderColor="White"
+                                                        Text="{Binding Money}" InputType="Numeric"
+                                                        ErrorText="Money can't null" ErrorColor="Red" HasError="{Binding IsErrorMoney}"
+                                                        TintColor="{StaticResource Yellow}"/>
+                            <material:MaterialTextField Placeholder="Address"
+                                                        CardBackgroundColor="{StaticResource LightPrimary}" 
+                                                        TextColor="White" FloatingPlaceholderColor="White" 
+                                                        PlaceholderColor="White"
+                                                        Text="{Binding Address}" InputType="Default"
+                                                        TintColor="{StaticResource Yellow}"/>
+                            <material:MaterialTextField Placeholder="Description"
+                                                        CardBackgroundColor="{StaticResource LightPrimary}" 
+                                                        TextColor="White" FloatingPlaceholderColor="White" 
+                                                        PlaceholderColor="White" HelperTextColor="Gray"
+                                                        HelperText="Thông tin về trình độ học của H/s, môn, lớp, khối,..."
+                                                        Text="{Binding Description}" InputType="Default"
+                                                        ErrorText="Description can't null" ErrorColor="Red" HasError="{Binding IsErrorDescription}"
+                                                        TintColor="{StaticResource Yellow}"/>
+                        </StackLayout>
+                    </Frame>
+                    <!--#endregion-->
+
+
+                    <!--#region Button -->
+                    <StackLayout Grid.Row="2" Orientation="Horizontal" 
+                                 HorizontalOptions="Center" VerticalOptions="Start">
+                        <material:MaterialButton  BackgroundColor="{StaticResource LightPrimary}" HorizontalOptions="Center" 
+                                             Text="Cancel" TextColor="White" VerticalOptions="Center" 
+                                                  Command="{Binding CancelCommand}"/>
+                        <material:MaterialButton  BackgroundColor="{StaticResource LightPrimary}" HorizontalOptions="Center" 
+                                             Text="Ok" TextColor="White" VerticalOptions="Center" 
+                                                  Command="{Binding OkCommand}"/>
+                    </StackLayout>
+                    
+                    <!--#endregion-->
+                </Grid>
+            </ScrollView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

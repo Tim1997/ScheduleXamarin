@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Schedule.Controls.ListSessionsView">
+    
+    <ContentView.Content>
+        <CollectionView
+            x:Name="listDates"
+            BackgroundColor="Transparent"
+            HeightRequest="30"
+            ItemsSource="{Binding SelectClass.Sessions}"
+            SelectionMode="Single">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout ItemSpacing="3" Orientation="Horizontal"/>
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="5"
+                        Padding="5,0,5,5"
+                        BackgroundColor="{StaticResource Yellow}"
+                        CornerRadius="10"
+                        HasShadow="False"
+                        IsClippedToBounds="True"
+                        WidthRequest="30">
+                        <Grid
+                            HorizontalOptions="Center"
+                            RowDefinitions="auto"
+                            VerticalOptions="CenterAndExpand">
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                FontFamily="MuliBold"
+                                FontSize="Subtitle"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding}"
+                                TextColor="#000000"/>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </ContentView.Content>
+</ContentView>

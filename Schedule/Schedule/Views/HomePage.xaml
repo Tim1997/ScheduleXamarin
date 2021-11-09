@@ -1,0 +1,355 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             
+             xmlns:vm="clr-namespace:Schedule.ViewModels"
+             Title="{Binding Title}"
+             Shell.NavBarIsVisible="False"
+             xmlns:icon="clr-namespace:Schedule.Helpers"
+             xmlns:cardview="clr-namespace:PanCardView;assembly=PanCardView"
+             xmlns:proc="clr-namespace:PanCardView.Processors;assembly=PanCardView"
+             xmlns:models="clr-namespace:Schedule.Models"
+             xmlns:controls="clr-namespace:Schedule.Controls"
+             xmlns:plugin="clr-namespace:Xamarin.Plugin.Calendar.Controls;assembly=Xamarin.Plugin.Calendar"
+             xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             
+             x:Class="Schedule.Views.HomePage">
+
+    <ContentPage.BindingContext>
+        <vm:HomeViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding PageAppearingCommand}" />
+    </ContentPage.Behaviors>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="Accent">#96d1ff</Color>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+              RowSpacing="0">
+            <ActivityIndicator IsRunning="{Binding IsBusy}" VerticalOptions="Center"
+                               Color="{StaticResource Yellow}"/>
+            <ScrollView>
+                <Grid ColumnSpacing="0"
+                      HorizontalOptions="FillAndExpand"
+                      RowDefinitions="auto, auto, auto, auto, auto"
+                      VerticalOptions="FillAndExpand"
+                      x:Name="gMain">
+
+                    <!--#region Header -->
+                    <Grid Grid.Row="0"
+                          ColumnDefinitions="*, auto, auto, auto">
+                        <!--#region Title-->
+                        <StackLayout
+                        Grid.Row="0"
+                        Margin="20,30,20,0"
+                        HorizontalOptions="FillAndExpand"
+                        Orientation="Horizontal">
+                            <Image
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Aspect="AspectFit"
+                            HeightRequest="24"
+                            Source="logo"
+                            WidthRequest="24" />
+                            <Label>
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span
+                                        FontFamily="MuliBlack"
+                                        FontSize="20"
+                                        Text="TIM" />
+                                        <Span
+                                        FontFamily="MuliBlack"
+                                        FontSize="20"
+                                        Text="DEV"
+                                        TextColor="{StaticResource Yellow}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </StackLayout>
+                        <!--#endregion-->
+
+                        <!--#region tab bar-->
+                        <Image
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="0,30,20,0"
+                        Aspect="AspectFit"
+                        HeightRequest="20"
+                        Source="plus"
+                        WidthRequest="20">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer
+                                Command="{Binding Path=BindingContext.AddCommand, Source={x:Reference Name=gMain}}"
+                                CommandParameter="{Binding .}" />
+                            </Image.GestureRecognizers>
+                        </Image>
+                        <Image
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Margin="0,30,20,0"
+                        Aspect="AspectFit"
+                        HeightRequest="20"
+                        Source="edit"
+                        WidthRequest="20">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer
+                                Command="{Binding Path=BindingContext.EditCommand, Source={x:Reference Name=gMain}}"
+                                CommandParameter="{Binding .}" />
+                            </Image.GestureRecognizers>
+                        </Image>
+                        <Image
+                        Grid.Row="0"
+                        Grid.Column="3"
+                        Margin="0,30,20,0"
+                        Aspect="AspectFit"
+                        HeightRequest="20"
+                        Source="trash"
+                        WidthRequest="20">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer
+                                Command="{Binding Path=BindingContext.RemoveCommand, Source={x:Reference Name=gMain}}"
+                                CommandParameter="{Binding .}" />
+                            </Image.GestureRecognizers>
+                        </Image>
+                        <!--#endregion-->
+
+                    </Grid>
+                    <!--#endregion-->
+
+                    <!--#region Body -->
+                    <cardview:CoverFlowView
+                        x:Name="coverFlowView"
+                        Grid.Row="1"
+                        Margin="0,20,0,0"
+                        IsCyclical="true"
+                        ItemsSource="{Binding Users}"
+                        PositionShiftValue="90"
+                        SelectedItem="{Binding SelectedUser}"
+                        ItemSwipedCommand="{Binding SwipeCardCommand}"
+                        PropertyChanged="CoverFlowView_PropertyChanged">
+                        <x:Arguments>
+                            <proc:CoverFlowProcessor ScaleFactor="0.75" />
+                        </x:Arguments>
+
+                        <cardview:CoverFlowView.ItemTemplate>
+                            <DataTemplate x:DataType="models:User">
+
+                                <Grid Margin="50,0">
+                                    <Frame Padding="0" CornerRadius="10"
+                                           HasShadow="true" IsClippedToBounds="True">
+                                        <Image Source="{Binding Background}" BackgroundColor="{StaticResource LightPrimary}" Aspect="Fill" HeightRequest="200"/>
+                                    </Frame>
+
+                                    <Grid Margin="5">
+                                        <!--#region Description -->
+                                        <StackLayout VerticalOptions="Start" HorizontalOptions="Start">
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label FontFamily="MaterialIcons" FontSize="Title"
+                                                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                                       Text="{x:Static icon:FontIcons.Phone}" TextColor="White"/>
+                                                <Label FontFamily="MuliBold"
+                                                       FontSize="Subtitle" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand"
+                                                       Text="{Binding Phone}" TextColor="White" 
+                                                       Margin="0,0,80,0"/>
+                                            </StackLayout>
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label FontFamily="MaterialIcons" FontSize="Title"
+                                                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                                       Text="{x:Static icon:FontIcons.Map}" TextColor="White"/>
+                                                <Label FontFamily="MuliBold"
+                                                       FontSize="Subtitle" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand"
+                                                       Text="{Binding Address}" TextColor="White" 
+                                                       Margin="0,0,80,0"/>
+                                            </StackLayout>
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label FontFamily="MaterialIcons" FontSize="Title"
+                                                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                                       Text="{x:Static icon:FontIcons.Star}" TextColor="White"/>
+                                                <Label FontFamily="MuliBold"
+                                                       FontSize="Subtitle" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand"
+                                                       Text="{Binding Description}" TextColor="White" 
+                                                       Margin="0,0,80,0"/>
+                                            </StackLayout>
+                                        </StackLayout>
+                                        <!--#endregion-->
+
+                                        <!--#region Title Name -->
+                                        <Label FontFamily="MuliBold" VerticalTextAlignment="Center"
+                                               FontSize="Title"
+                                               Text="{Binding Name}" TextColor="White"
+                                               HorizontalOptions="End" VerticalOptions="Start"/>
+                                        <!--#endregion-->
+
+                                        <!--#region Money -->
+                                        <StackLayout Orientation="Horizontal" VerticalOptions="End" HorizontalOptions="Start">
+                                            <Label FontFamily="MaterialIcons" FontSize="Title" Padding="0,3,0,0"
+                                                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                                       Text="{x:Static icon:FontIcons.Cash}" TextColor="White"/>
+                                            <Label FontFamily="MuliBold"
+                                                       FontSize="Title" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand"
+                                                       Text="{Binding Money, StringFormat='{0:#,###} VND'}" TextColor="White" />
+                                        </StackLayout>
+                                        <!--#endregion-->
+
+                                        <!--#region Help -->
+                                        <StackLayout Orientation="Horizontal" VerticalOptions="End" HorizontalOptions="End">
+                                            <Label FontFamily="MaterialIcons" FontSize="Title" Margin="4"
+                                                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                                       Text="{x:Static icon:FontIcons.HelpBox}" TextColor="White"/>
+                                        </StackLayout>
+                                        <!--#endregion-->
+
+                                    </Grid>
+                                </Grid>
+                            </DataTemplate>
+                        </cardview:CoverFlowView.ItemTemplate>
+                    </cardview:CoverFlowView>
+                    <!--#endregion-->
+
+                    <!--#region Total information money -->
+                    <Grid Grid.Row="2" RowDefinitions="auto, *" 
+                          Margin="20,20">
+
+                        <!--#region Title -->
+                        <Label Grid.Row="0" FontFamily="MuliBold" FontSize="Title" 
+                               VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand"
+                               Text="Transactions" TextColor="White"/>
+                        <!--#endregion-->
+
+                        <!--#region Money -->
+                        <Grid Grid.Row="1" ColumnDefinitions="auto, *, auto, *">
+                            <Frame Grid.Column="0" Padding="0" CornerRadius="10" 
+                               BackgroundColor="{StaticResource LightPrimary}"
+                               HasShadow="true" IsClippedToBounds="True"
+                               HeightRequest="40" WidthRequest="50"
+                               HorizontalOptions="End">
+                                <Label  FontFamily="MaterialIcons" FontSize="35"
+                                        HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                        Text="{x:Static icon:FontIcons.ArrowUpBold}" TextColor="{StaticResource Green}"/>
+                            </Frame>
+
+                            <StackLayout Grid.Column="1" HorizontalOptions="Start">
+                                <Label FontFamily="MuliBold" FontSize="Large" 
+                                       VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand"
+                                       Text="Debt" TextColor="White" TextTransform="Uppercase"/>
+                                <Label FontSize="Large" 
+                                       VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand"
+                                       Text="{Binding SelectedUser.DebtMoney, StringFormat='{0:#,###} VND'}" TextColor="White" />
+                            </StackLayout>
+
+                            <Frame Grid.Column="2" Padding="0" CornerRadius="10" 
+                               BackgroundColor="{StaticResource LightPrimary}"
+                               HasShadow="true" IsClippedToBounds="True"
+                               HeightRequest="40" WidthRequest="50"
+                               HorizontalOptions="Center">
+                                <Label FontFamily="MaterialIcons" FontSize="35"
+                                   HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                   Text="{x:Static icon:FontIcons.ArrowDownBold}" TextColor="{StaticResource Green}"/>
+                            </Frame>
+
+                            <StackLayout Grid.Column="3" HorizontalOptions="Start">
+                                <Label FontFamily="MuliBold" FontSize="Large" 
+                                       VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand"
+                                       Text="Income" TextColor="White" TextTransform="Uppercase"/>
+                                <Label FontSize="Large" 
+                                       VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand"
+                                       Text="{Binding SelectedUser.IncomeMoney, StringFormat='{0:#,###} VND'}" TextColor="White" />
+                            </StackLayout>
+                        </Grid>
+
+                        <!--#endregion-->
+                    </Grid>
+                    <!--#endregion-->
+
+                    <!--#region Time -->
+                    <Grid Grid.Row="3" RowDefinitions="auto, *" 
+                          Margin="20,20,20,0">
+                        
+                        <!--#region Title -->
+                        <Grid Grid.Row="0">
+                            <Label FontFamily="MuliBold" FontSize="Title" 
+                               VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand"
+                               Text="Timeline" TextColor="White"/>
+
+                            <Label  FontFamily="MaterialIcons" FontSize="35" Margin="0,0,10,0"
+                                    HorizontalTextAlignment="End" VerticalTextAlignment="Center" 
+                                    Text="{x:Static icon:FontIcons.ContentCopy}" TextColor="White">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Path=BindingContext.CopyCommand, Source={x:Reference Name=gMain}}"
+                                        CommandParameter="{Binding .}" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </Grid>
+                        <!--#endregion-->
+
+                        <!--#region Calender -->
+                        <plugin:Calendar Grid.Row="1" Padding="0,0" AnimateCalendar="true"
+                                         DaysTitleMaximumLength="ThreeChars"
+                                         DayViewCornerRadius="20" DayViewSize="40" 
+                                         DeselectedDayTextColor="White"
+                                         DaysTitleHeight="40" DaysTitleLabelStyle="{StaticResource daysTitleLabelStyle}"
+                                         DaysLabelStyle="{StaticResource daysLabelStyle}" DaysTitleColor="Orange"
+                                         MonthLabelColor="White"
+                                         Culture="{Binding Culture}"
+                                         DayTappedCommand="{Binding DayTappedCommand}"
+                                         
+                                         DisableSwipeDetection="true" SwipeToChangeMonthEnabled="false" SwipeUpToHideEnabled="false" 
+                                         HeaderSectionVisible="true" OtherMonthDayIsVisible="true"
+                                         CalendarSectionShown="true" FooterArrowVisible="False" FooterSectionVisible="false"
+                                         
+                                        EventIndicatorColor="White"
+                                        EventIndicatorSelectedColor="White"
+                                        EventIndicatorSelectedTextColor="{StaticResource Yellow}"
+                                        EventIndicatorTextColor="{StaticResource Yellow}"
+                                        EventIndicatorType="Background"
+                                        Events="{Binding Events}"
+                                        
+                                        HorizontalOptions="FillAndExpand"
+                                        
+                                        MonthYear="{Binding MonthYear}"
+                                        OtherMonthDayColor="Gray"
+                                        
+                                        SelectedDate="{Binding SelectedDate}"
+                                        
+                                        SelectedDayBackgroundColor="#4287f5"
+                                        SelectedDayTextColor="White"
+                                        SelectedTodayTextColor="Blue"
+                                        SwipeLeftCommand="{Binding SwipeLeftCommand}"
+                                        SwipeRightCommand="{Binding SwipeRightCommand}"
+                                        SwipeUpCommand="{Binding SwipeUpCommand}"
+                                        
+                                        TodayFillColor="{StaticResource Yellow}"
+                                        TodayOutlineColor="{StaticResource Yellow}"
+                                        TodayTextColor="White"
+                                        VerticalOptions="FillAndExpand">
+                            <plugin:Calendar.HeaderSectionTemplate>
+                                <controls:CalenderHeader />
+                            </plugin:Calendar.HeaderSectionTemplate>
+
+                        </plugin:Calendar>
+                        <!--#endregion-->
+                    </Grid>
+                    <!--#endregion-->
+
+                    <!--#region Payment -->
+                    <material:MaterialButton Grid.Row="4" BackgroundColor="{StaticResource Green}"
+                                             Text="payment" TextColor="White" VerticalOptions="Center" HorizontalOptions="End"
+                                             Command="{Binding PaymentCommand}" Margin="0,0,30,10" ImageSource="moneybag.png"/>
+                    <!--#endregion-->
+                </Grid>
+
+            </ScrollView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

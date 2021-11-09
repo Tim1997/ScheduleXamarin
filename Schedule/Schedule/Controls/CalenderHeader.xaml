@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DataTemplate xmlns="http://xamarin.com/schemas/2014/forms"
+              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              
+              xmlns:icon="clr-namespace:Schedule.Helpers"
+              
+              x:Class="Schedule.Controls.CalenderHeader">
+    <Grid
+        Margin="0,2"
+        Padding="0"
+        HorizontalOptions="FillAndExpand"
+        IsVisible="{Binding ShowMonthPicker}"
+        VerticalOptions="Start">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+
+        <Frame
+            Grid.Column="0"
+            Padding="0"
+            BackgroundColor="White"
+            BorderColor="Orange"
+            CornerRadius="18"
+            HasShadow="False"
+            HeightRequest="36"
+            HorizontalOptions="CenterAndExpand"
+            VerticalOptions="Center"
+            WidthRequest="36">
+            <Label
+                FontAttributes="Bold"
+                FontSize="25"
+                HorizontalOptions="CenterAndExpand"
+                HorizontalTextAlignment="Center"
+                InputTransparent="True"
+                FontFamily="MaterialIcons"
+                Text="{x:Static icon:FontIcons.ArrowLeft}"
+                TextColor="{StaticResource Yellow}"
+                VerticalOptions="CenterAndExpand"
+                VerticalTextAlignment="Center" />
+
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding PrevMonthCommand}" />
+                <TapGestureRecognizer Command="{Binding Path=BindingContext.MonthExtentionCommand}" />
+            </Frame.GestureRecognizers>
+        </Frame>
+
+        <Label
+            Grid.Column="1"
+            FontAttributes="Bold"
+            FontSize="Large"
+            HorizontalOptions="Center"
+            TextColor="{Binding MonthLabelColor}"
+            VerticalOptions="Center">
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="{Binding MonthText, Mode=TwoWay}" />
+                    <Span Text=", " />
+                    <Span Text="{Binding Year, Mode=TwoWay}" />
+                </FormattedString>
+            </Label.FormattedText>
+
+        </Label>
+
+        <Frame
+            Grid.Column="2"
+            Padding="0"
+            BackgroundColor="White"
+            BorderColor="Orange"
+            CornerRadius="18"
+            HasShadow="False"
+            HeightRequest="36"
+            HorizontalOptions="CenterAndExpand"
+            VerticalOptions="CenterAndExpand"
+            WidthRequest="36">
+            <Label
+                FontAttributes="Bold"
+                FontSize="25"
+                HorizontalOptions="CenterAndExpand"
+                HorizontalTextAlignment="Center"
+                InputTransparent="True"
+                FontFamily="MaterialIcons"
+                Text="{x:Static icon:FontIcons.ArrowRight}"
+                TextColor="{StaticResource Yellow}"
+                VerticalOptions="CenterAndExpand"
+                VerticalTextAlignment="Center" />
+
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding NextMonthCommand}" />
+                <TapGestureRecognizer Command="{Binding Path=BindingContext.MonthExtentionCommand}" />
+            </Frame.GestureRecognizers>
+        </Frame>
+    </Grid>
+</DataTemplate>
